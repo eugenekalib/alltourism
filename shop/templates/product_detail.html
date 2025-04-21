@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row mb-3 mt-4">
+    <div class="col-md-1"></div>
+
+    <!-- Информация о товаре -->
+    <div class="col-md-5 p-3 border rounded">
+        <!-- Категория -->
+        <div class="border-bottom mb-2 pb-2">
+            <span class="text-muted">Категория:</span>
+            <a class="text-decoration-none text-dark" href="{% url 'shop:filter_by_category' product.category.slug %}"> {{ product.category }}</a>
+        </div>
+
+        <!-- Название -->
+        <h2>{{ product.title }}</h2>
+
+        <!-- Цена -->
+        <h4 class="mt-4 text-dark">Цена: ₽{{ product.price }}</h4>
+
+        <!-- Описание -->
+        <div class="mt-4 pe-3 mb-5">{{ product.description }}</div>
+
+        <!-- Добавить в корзину -->
+        <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-primary mt-4" value="Добавить в корзину">
+        </form>
+
+        <!-- Избранное -->
+        <br>
+        {% if favorites == 'remove' %}
+            <a href="{% url 'shop:remove_from_favorites' product.id %}" class="btn btn-outline-danger mt-5">
+                Удалить из избранного
+            </a>
+        {% else %}
+            <a href="{% url 'shop:add_to_favorites' product.id %}" class="btn btn-outline-success mt-5">
+                Добавить в избранное
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Изображение товара -->
+    <div class="col-md-6">
+        <img style="object-fit: cover;" class="rounded" src="{{ product.image.url }}" width="510" height="500">
+    </div>
+</div>
+
+<!-- Похожие товары -->
+<div class="row mt-4 mb-4">
+    <h3 class="mb-3">Похожие товары:</h3>
+    <hr>
+    <div class="d-flex flex-wrap">
+        {% for p in related_products %}
+            {% if p != product %}
+                <div class="card me-3 mb-3" style="width: 16rem;">
+                    <img style="object-fit: cover;" class="card-img-top mt-2" width="268" height="200" src="{{ p.image.url }}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ p.title }}</h5>
+                        <p class="text-muted">₽{{ p.price }}</p>
+                        <a href="{{ p.get_absolute_url }}" class="btn btn-outline-primary w-100">Купить</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

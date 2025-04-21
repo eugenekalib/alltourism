@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if products %}
+<h2 class="mb-4">Избранные товары</h2>
+<hr>
+<div class="d-flex flex-wrap">
+  {% for product in products %}
+  <div class="card me-3 mb-3" style="width: 16rem;">
+    <img style="object-fit: cover;" class="card-img-top mt-2" width="268" height="200" src="{{ product.image.url }}">
+    <div class="card-body text-center">
+      <h5 class="card-title">{{ product.title }}</h5>
+      <p class="text-muted">₽{{ product.price }}</p>
+      <a href="{{ product.get_absolute_url }}" class="btn btn-primary w-100 mb-2">Купить</a>
+      <a href="{% url 'shop:remove_from_favorites' product.id %}" class="btn btn-outline-danger w-100">Удалить из избранного</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8 mt-5 pt-5 text-center">
+    <h3 class="text-muted">Список избранного пуст</h3>
+    <a href="/" class="text-primary text-decoration-none">← Назад в магазин</a>
+  </div>
+  <div class="col-md-2"></div>
+</div>
+{% endif %}
+{% endblock %}

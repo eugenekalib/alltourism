@@ -1,0 +1,46 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+
+<h3 class="mb-4">Список товаров</h3>
+
+<table class="table table-striped">
+    <thead class="text-muted">
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Название</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Категория</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Удалить</th>
+            <th scope="col">Изменить</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>
+                <a class="text-decoration-none" href="{{ product.get_absolute_url }}">
+                    {{ product.title }}
+                </a>
+            </td>
+            <td>${{ product.price }}</td>
+            <td>{{ product.category }}</td>
+            <td>{{ product.date_created|date:"d.m.Y" }}</td>
+            <td>
+                <a class="text-danger text-decoration-none" href="{% url 'dashboard:delete_product' product.id %}">
+                    Удалить
+                </a>
+            </td>
+            <td>
+                <a class="text-info text-decoration-none" href="{% url 'dashboard:edit_product' product.id %}">
+                    Изменить
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

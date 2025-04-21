@@ -1,0 +1,14 @@
+{% load i18n %}{% autoescape off %}
+{% blocktranslate %}Вы получили это письмо, потому что запросили сброс пароля для своей учётной записи на сайте {{ site_name }}.{% endblocktranslate %}
+
+{% translate "Пожалуйста, перейдите по следующей ссылке и задайте новый пароль:" %}
+{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url 'accounts:password_reset_confirm' uidb64=uid token=token %}
+{% endblock %}
+{% translate 'Ваше имя пользователя, если вы его забыли:' %} {{ user.get_username }}
+
+{% translate "Спасибо, что пользуетесь нашим сайтом!" %}
+
+{% blocktranslate %}Команда {{ site_name }}{% endblocktranslate %}
+
+{% endautoescape %}

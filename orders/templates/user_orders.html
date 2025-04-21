@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if orders %}
+    {% for order in orders %}
+    <div class="col-md-7 mb-4 border rounded p-3">
+        <!-- Номер заказа -->
+        <b style="float: right;">Заказ №{{ order.id }}</b>
+
+        <!-- Статус оплаты -->
+        {% if order.status %}
+            <h4><b class="text-success">Успешно</b></h4>
+        {% else %}
+            <h4><b class="text-danger">Отменён</b></h4>
+        {% endif %}
+
+        <div class="text-muted border-top pt-2 mb-2"></div>
+
+        <!-- Товары в заказе -->
+        {% for item in order.items.all %}
+        <div class="border-bottom py-2">
+            <p><strong>Товар:</strong> <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">{{ item.product.title }}</a></p>
+            <p><strong>Цена:</strong> ₽{{ item.price }}</p>
+            <p><strong>Количество:</strong> {{ item.quantity }}</p>
+        </div>
+        {% endfor %}
+
+        <!-- Общая сумма -->
+        <b>Итого: ₽{{ order.get_total_price }}</b>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 mt-5 pt-5 text-center">
+        <h3 class="text-muted">Список заказов пуст</h3>
+        <a href="/" class="text-primary text-decoration-none">← Назад в магазин</a>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+{% endif %}
+
+{% endblock %}

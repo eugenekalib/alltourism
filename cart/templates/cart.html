@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-md-2"></div>
+
+{% if cart_count != 0 %}
+<div class="col-md-8 border rounded p-3 mt-4">
+    <h3 class="mb-4">Корзина</h3>
+    <table class="table table-striped align-middle">
+        <thead class="text-muted">
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Товар</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Кол-во</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Удалить</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>
+              <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">
+                {{ item.product.title }}
+              </a>
+            </td>
+            <td>{{ item.price }} ₽</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.total_price }} ₽</td>
+            <td>
+              <a class="text-danger text-decoration-none" href="{% url 'cart:remove_from_cart' item.product.id %}">
+                удалить
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    <h4 class="mt-4"><span class="text-muted">Итого:</span> {{ cart.get_total_price }} ₽</h4>
+    <a href="{% url 'orders:create_order' %}" class="btn btn-success float-end mt-2">
+        Оформить заказ
+    </a>
+</div>
+{% else %}
+<div class="col-md-8 mt-5 pt-5 text-center">
+  <h3 class="text-muted text-capitalize">Корзина пуста</h3>
+  <a href="/" class="text-primary text-decoration-none">← Назад в магазин</a>
+</div>
+{% endif %}
+
+<div class="col-md-2"></div>
+{% endblock %}

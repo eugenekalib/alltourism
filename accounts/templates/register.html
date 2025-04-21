@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="col-md-6 mx-auto mt-5">
+        <form method="POST">
+            {% csrf_token %}
+            <h3>Создать аккаунт</h3>
+            <hr>
+            {{ form|crispy }}
+            <div class="form-group">
+                <button class="btn btn-primary w-100 mt-2" type="submit">Создать</button>
+            </div>
+        </form>
+        <div class="mt-3">
+            <small class="text-muted">
+                Уже есть аккаунт? <a href="{% url 'accounts:user_login' %}">Войти</a>
+            </small>
+        </div>
+    </div>
+{% endblock %}

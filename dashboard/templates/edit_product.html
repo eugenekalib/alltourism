@@ -1,0 +1,18 @@
+{% extends "dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="col-md-8 mx-auto mt-4">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4 class="mb-3">Добавление / Редактирование</h4>
+        {{ form|crispy }}
+        <div class="form-group">
+            <button class="btn btn-primary mt-3 w-100" type="submit">
+                <i class="bi bi-check-circle"></i> Сохранить
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

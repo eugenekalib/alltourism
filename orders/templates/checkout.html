@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-md-2"></div>
+
+<div class="col-md-8 border rounded p-4 mt-4">
+    <h3 class="text-muted">Сумма вашего заказа: ₽{{ order.get_total_price }}</h3>
+    <hr>
+    <p><strong>Вы хотите продолжить и оплатить заказ?</strong></p>
+    <div class="d-flex gap-2 mt-3">
+        <a href="{% url 'cart:show_cart' %}" class="btn btn-danger">Вернуться в корзину</a>
+        <a href="{% url 'orders:create_order' %}" class="btn btn-outline-success">Продолжить и оплатить</a>
+    </div>
+</div>
+
+<div class="col-md-2"></div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Все товары</h2>
+
+<!-- 🔽 ФИЛЬТРЫ -->
+<form method="get" class="row mb-4">
+  <div class="col-md-3">
+    <label for="min_price" class="form-label">Цена от:</label>
+    <input type="number" name="min_price" id="min_price" class="form-control" value="{{ request.GET.min_price }}">
+  </div>
+  <div class="col-md-3">
+    <label for="max_price" class="form-label">Цена до:</label>
+    <input type="number" name="max_price" id="max_price" class="form-control" value="{{ request.GET.max_price }}">
+  </div>
+  <div class="col-md-4">
+    <label for="category" class="form-label">Категория:</label>
+    <select name="category" id="category" class="form-select">
+      <option value="">Все</option>
+      {% for category in categories %}
+        <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>
+          {{ category.title }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2 d-flex align-items-end">
+    <button type="submit" class="btn btn-primary w-100">Фильтровать</button>
+  </div>
+</form>
+<!-- 🔼 КОНЕЦ ФИЛЬТРОВ -->
+
+<div class="d-flex flex-wrap justify-content-start">
+  {% for product in products %}
+    <div class="card me-3 mb-3" style="width: 16rem;">
+      <img src="{{ product.image.url }}" class="card-img-top" height="200" style="object-fit: cover;">
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ product.title }}</h5>
+        <p class="text-muted">₽{{ product.price }}</p>
+        <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary w-100">Купить</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Пагинация -->
+<div class="d-flex justify-content-center mt-4">
+  <ul class="pagination">
+    {% if products.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">←</a></li>
+    {% endif %}
+    <li class="page-item active"><span class="page-link">{{ products.number }}</span></li>
+    {% if products.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">→</a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endblock %}
