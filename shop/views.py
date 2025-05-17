@@ -20,9 +20,16 @@ def paginat(request, list_objects):
 
 
 def home_page(request):
-	products = Product.objects.all()
-	context = {'products': paginat(request ,products)}
-	return render(request, 'home_page.html', context)
+    # Исключаем категории с пометкой is_sub
+    categories = Category.objects.filter(is_sub=False)
+    products = Product.objects.all().order_by('?')[:6]
+    
+    # Добавляем products в контекст
+    context = {
+        'products': products,
+        'categories': categories
+    }
+    return render(request, 'home_page.html', context)
 
 
 def product_detail(request, slug):
@@ -30,15 +37,16 @@ def product_detail(request, slug):
 	product = get_object_or_404(Product, slug=slug)
 	related_products = Product.objects.filter(category=product.category).all()[:5]
 	context = {
-		'title':product.title,
-		'product':product,
-		'form':form,
-		'favorites':'favorites',
-		'related_products':related_products
+		'title': product.title,
+		'product': product,
+		'form': form,
+		'favorites': 'favorites',
+		'related_products': related_products
 	}
-	if request.user.likes.filter(id=product.id).first():
+	if request.user.is_authenticated and request.user.likes.filter(id=product.id).first():
 		context['favorites'] = 'remove'
 	return render(request, 'product_detail.html', context)
+
 
 
 @login_required
@@ -95,6 +103,7 @@ def about_page(request):
 
 def all_products(request):
     products = Product.objects.all()
+    # Получаем только основные категории (не подкатегории)
     categories = Category.objects.filter(is_sub=False)
 
     # фильтры

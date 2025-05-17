@@ -1,16 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="col-md-2"></div>
-<div class="col-md-8 mt-5 pt-3 text-center">
-  <h2>О нас</h2>
-  <p class="lead mt-4">
-    Добро пожаловать в наш интернет-магазин туристических товаров!
-    <br>Мы предлагаем широкий выбор товаров для активного отдыха, походов и приключений.
-  </p>
-  <p>
-    Здесь вы найдёте палатки, спальники, рюкзаки и многое другое. Мы работаем с надёжными поставщиками и гарантируем качество каждой единицы.
-  </p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-shop display-1 text-primary mb-3"></i>
+                    <h1 class="display-5 fw-bold">О нас</h1>
+                </div>
+                
+                <div class="card-body">
+                    <p class="lead text-center mb-4">
+                        Добро пожаловать в наш интернет-магазин туристических товаров!
+                        <br>Мы предлагаем широкий выбор товаров для активного отдыха, походов и приключений.
+                    </p>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-shield-check text-primary fs-4 me-3"></i>
+                                <div>
+                                    <h5>Качество</h5>
+                                    <p class="text-muted">Мы работаем только с проверенными поставщиками и гарантируем качество каждого товара.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-truck text-primary fs-4 me-3"></i>
+                                <div>
+                                    <h5>Доставка</h5>
+                                    <p class="text-muted">Быстрая доставка по всей России. Отправляем заказы каждый день.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <h4 class="mb-4">Нужна помощь?</h4>
+                        <a href="https://t.me/alltoursupbot" 
+                           class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm hover-lift">
+                            <i class="bi bi-telegram me-2"></i>
+                            Поддержка 24/7
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="col-md-2"></div>
+
+<style>
+.hover-lift {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-3px);
+}
+
+.card {
+    background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+}
+
+.bi {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover .bi {
+    transform: scale(1.1);
+}
+</style>
 {% endblock %}

@@ -1,59 +1,201 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if products %}
-<div class="d-flex flex-wrap">
-  {% for product in products.object_list %}
-  <div class="card me-3 mb-3" style="width: 16rem;">
-      <img style="object-fit: cover;" class="card-img-top mt-2" width="268" height="200" src="{{ product.image.url }}">
-      <div class="card-body text-center">
-        <h5 class="card-title">{{ product.title }}</h5>
-        <p class="text-muted">₽{{ product.price }}</p>
-        {% if product.slug %}
-        <a href="{{ product.get_absolute_url }}" class="...">Купить</a>
-        {% else %}
-        <p class="text-danger">Нет ссылки</p>
-        {% endif %}
-        
-      </div>
-  </div>
-  {% endfor %}
+<!-- Hero секция -->
+<div class="hero-section position-relative overflow-hidden p-3 p-md-5 bg-light">
+    <div class="col-md-8 p-lg-5 mx-auto my-5">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold">Снаряжение для путешествий</h1>
+            <p class="lead fw-normal">Откройте мир приключений с качественным туристическим снаряжением</p>
+            <a class="btn btn-primary btn-lg px-4 me-md-2" href="{% url 'shop:all_products' %}">Смотреть товары</a>
+        </div>
+    </div>
 </div>
 
-<!-- Пагинация -->
-<div class="d-flex justify-content-center mt-4">
-  <ul class="pagination">
-    {% if products.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ products.previous_page_number }}">← Назад</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="?page={{ products.previous_page_number }}">{{ products.previous_page_number }}</a>
-      </li>
-    {% endif %}
-
-    <li class="page-item active">
-      <span class="page-link">{{ products.number }}</span>
-    </li>
-
-    {% if products.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ products.next_page_number }}">{{ products.next_page_number }}</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="?page={{ products.next_page_number }}">Вперёд →</a>
-      </li>
-    {% endif %}
-  </ul>
+<!-- Преимущества -->
+<div class="container py-5">
+    <div class="row g-4 py-5">
+        <div class="col-md-3 text-center">
+            <div class="feature-icon bg-primary bg-gradient p-2 rounded-circle mb-3">
+                <i class="bi bi-patch-check text-white fa-2x"></i>
+            </div>
+            <h5>Гарантия качества</h5>
+            <p class="text-muted">Только проверенные бренды</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="feature-icon bg-primary bg-gradient p-2 rounded-circle mb-3">
+                <i class="bi bi-truck text-white fa-2x"></i>
+            </div>
+            <h5>Быстрая доставка</h5>
+            <p class="text-muted">По всей России</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="feature-icon bg-primary bg-gradient p-2 rounded-circle mb-3">
+                <i class="bi bi-tag text-white fa-2x"></i>
+            </div>
+            <h5>Лучшие цены</h5>
+            <p class="text-muted">Регулярные акции</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <div class="feature-icon bg-primary bg-gradient p-2 rounded-circle mb-3">
+                <i class="bi bi-headset text-white fa-2x"></i>
+            </div>
+            <h5>Поддержка 24/7</h5>
+            <p class="text-muted">Всегда на связи</p>
+        </div>
+    </div>
 </div>
 
-{% else %}
-<div class="row">
-  <div class="col-md-2"></div>
-  <div class="col-md-8 mt-5 pt-5 text-center">
-    <h3 class="text-muted">Нет доступных товаров</h3>
-  </div>
-  <div class="col-md-2"></div>
+<!-- Популярные категории -->
+<div class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Популярные категории</h2>
+        <div class="row g-4">
+            {% for category in categories %}
+            {% if not category.is_sub %}
+            <div class="col-md-3">
+                <a href="{% url 'shop:all_products' %}?category={{ category.slug }}" class="text-decoration-none">
+                    <div class="category-card p-4 bg-white rounded shadow-sm text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-box fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="text-dark">{{ category.title }}</h4>
+                        <p class="text-muted mb-0">Смотреть товары</p>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Случайные товары -->
+<div class="container py-5" id="featured">
+    <h2 class="text-center mb-5">Рекомендуемые товары</h2>
+    <div class="row g-4">
+        {% for product in products|slice:":6" %}
+        <div class="col-sm-6 col-md-4">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="position-relative">
+                    <img src="{{ product.image.url }}" class="card-img-top" height="300" style="object-fit: cover;">
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-primary rounded-pill">
+                        ₽{{ product.price }}
+                    </span>
+                </div>
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title text-truncate mb-3">{{ product.title }}</h5>
+                    <div class="mt-auto">
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary w-100 py-2">
+                            <i class="bi bi-cart-plus me-2"></i>Купить
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% if not products %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+        <div class="alert alert-info shadow-sm" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            <h4 class="alert-heading">Товары отсутствуют</h4>
+            <p class="mb-0">В данный момент нет доступных товаров.</p>
+        </div>
+    </div>
 </div>
 {% endif %}
+
+
+<style>
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/media/hero.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-card {
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.category-card i {
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover i {
+    transform: scale(1.1);
+}
+
+.card {
+    min-height: 450px;
+    border-radius: 1.5em !important;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    border-top-left-radius: 1.5em;
+    border-top-right-radius: 1.5em;
+}
+
+.badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-outline-primary {
+    border-radius: 0.75em;
+}
+
+.btn-outline-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.page-link {
+    color: #0d6efd;
+    border-radius: 0.25rem;
+    margin: 0 0.25rem;
+}
+
+.page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 100% !important;
+        margin: 0 1rem 2rem 1rem;
+    }
+    
+    .hero-section {
+        min-height: 400px;
+    }
+}
+</style>
 {% endblock %}

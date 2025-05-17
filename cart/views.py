@@ -15,7 +15,7 @@ def add_to_cart(request, product_id):
     if form.is_valid():
         data = form.cleaned_data
         cart.add(product=product, quantity=data['quantity'])
-        messages.success(request, 'Added to your cart!', 'info')
+        messages.success(request, 'Добавлено в корзину!', 'info')
     return redirect('shop:product_detail', slug=product.slug)
 
 
